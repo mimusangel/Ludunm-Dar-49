@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/PowerSource.obj-b0adc4d0fc484b62ef0bf656151488ba.mesh"
+
+[deps]
+
+files=[ "res://.import/PowerSource.obj-b0adc4d0fc484b62ef0bf656151488ba.mesh" ]
+
+source_file="res://Models/PowerSource.obj"
+dest_files=[ "res://.import/PowerSource.obj-b0adc4d0fc484b62ef0bf656151488ba.mesh", "res://.import/PowerSource.obj-b0adc4d0fc484b62ef0bf656151488ba.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

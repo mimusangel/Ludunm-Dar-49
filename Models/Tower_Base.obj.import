@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Tower_Base.obj-ab118a9e39d00892553c9aaaa000307c.mesh"
+
+[deps]
+
+files=[ "res://.import/Tower_Base.obj-ab118a9e39d00892553c9aaaa000307c.mesh" ]
+
+source_file="res://Models/Tower_Base.obj"
+dest_files=[ "res://.import/Tower_Base.obj-ab118a9e39d00892553c9aaaa000307c.mesh", "res://.import/Tower_Base.obj-ab118a9e39d00892553c9aaaa000307c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

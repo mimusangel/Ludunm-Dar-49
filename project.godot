@@ -11,7 +11,12 @@ config_version=4
 [application]
 
 config/name="LD49"
+run/main_scene="res://Scenes/MainMenu.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+GameData="*res://Scripts/GameData.cs"
 
 [physics]
 

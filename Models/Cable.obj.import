@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Cable.obj-15d27abd4300bc42ed212d58de697a91.mesh"
+
+[deps]
+
+files=[ "res://.import/Cable.obj-15d27abd4300bc42ed212d58de697a91.mesh" ]
+
+source_file="res://Models/Cable.obj"
+dest_files=[ "res://.import/Cable.obj-15d27abd4300bc42ed212d58de697a91.mesh", "res://.import/Cable.obj-15d27abd4300bc42ed212d58de697a91.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

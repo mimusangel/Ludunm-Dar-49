@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Condensator.obj-6818a2f04a51da300e2c206e1ef3e558.mesh"
+
+[deps]
+
+files=[ "res://.import/Condensator.obj-6818a2f04a51da300e2c206e1ef3e558.mesh" ]
+
+source_file="res://Models/Condensator.obj"
+dest_files=[ "res://.import/Condensator.obj-6818a2f04a51da300e2c206e1ef3e558.mesh", "res://.import/Condensator.obj-6818a2f04a51da300e2c206e1ef3e558.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true
