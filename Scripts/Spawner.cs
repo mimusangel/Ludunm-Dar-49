@@ -3,25 +3,31 @@ using System;
 
 public class Spawner : Spatial
 {
-    float timeToSpawn;
-    bool hasSpawn = false;
+    [Export]
+    public float firstSpawnTime = 5.0f;
+    [Export]
+    public float timeToSpawn = 5.0f;
+
+    string[] spawnList = {
+        "res://Scenes/Drone.tscn",
+        "res://Scenes/Weta.tscn"
+    };
+
+    float nextSpawn;
     public override void _Ready()
     {
-        timeToSpawn = 20.0f;
+        nextSpawn = firstSpawnTime;
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        if (hasSpawn == false)
+        nextSpawn -= delta;
+        if (nextSpawn <= 0)
         {
-            timeToSpawn -= delta;
-            if (timeToSpawn <= 0)
-            {
-                Node node = GD.Load<PackedScene>("res://Scenes/SimpleIA.tscn").Instance();
-                ((Spatial)node).Translation = GlobalTransform.origin;
-                GetTree().CurrentScene.AddChild(node);
-                hasSpawn = true;
-            }
+            nextSpawn += timeToSpawn;
+            Node node = GD.Load<PackedScene>(spawnList[GD.Randi() % spawnList.Length]).Instance();
+            ((Spatial)node).Translation = GlobalTransform.origin;
+            GetTree().CurrentScene.AddChild(node);
         }
     }
 }

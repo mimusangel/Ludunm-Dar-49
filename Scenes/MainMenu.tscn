@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scripts/MainMenu.cs" type="Script" id=1]
+[ext_resource path="res://Sounds/Musics/basic_cp_type.mp3" type="AudioStream" id=2]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -37,6 +38,11 @@ margin_top = 48.0
 margin_right = 100.0
 margin_bottom = 68.0
 text = "Exit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+autoplay = true
+bus = "Music"
 
 [connection signal="pressed" from="VBoxContainer/BtnPlay" to="VBoxContainer" method="Play"]
 [connection signal="pressed" from="VBoxContainer/BtnExit" to="VBoxContainer" method="Exit"]

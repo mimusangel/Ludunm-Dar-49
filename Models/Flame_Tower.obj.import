@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Flame_Tower.obj-b19721c79446e68f726109ce84d77a95.mesh"
+
+[deps]
+
+files=[ "res://.import/Flame_Tower.obj-b19721c79446e68f726109ce84d77a95.mesh" ]
+
+source_file="res://Models/Flame_Tower.obj"
+dest_files=[ "res://.import/Flame_Tower.obj-b19721c79446e68f726109ce84d77a95.mesh", "res://.import/Flame_Tower.obj-b19721c79446e68f726109ce84d77a95.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

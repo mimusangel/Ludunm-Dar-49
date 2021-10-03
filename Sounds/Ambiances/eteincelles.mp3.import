@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/eteincelles.mp3-db0b35597fc60e7590171453694e123e.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/eteincelles.mp3"
+dest_files=[ "res://.import/eteincelles.mp3-db0b35597fc60e7590171453694e123e.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

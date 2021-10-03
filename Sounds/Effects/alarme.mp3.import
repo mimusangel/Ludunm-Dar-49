@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/alarme.mp3-e5f7e4b9712000a8547b7ddece621520.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/alarme.mp3"
+dest_files=[ "res://.import/alarme.mp3-e5f7e4b9712000a8547b7ddece621520.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

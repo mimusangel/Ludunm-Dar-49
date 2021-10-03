@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/flammes_continues_lance_flamme.mp3-34e653295de0db558b888c395e65df1e.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/flammes_continues_lance_flamme.mp3"
+dest_files=[ "res://.import/flammes_continues_lance_flamme.mp3-34e653295de0db558b888c395e65df1e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

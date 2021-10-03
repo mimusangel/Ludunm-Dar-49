@@ -12,11 +12,28 @@ public class Objects : Spatial
         Tower
     }
 
+    public enum DamageType
+    {
+        None,
+        Ice,
+        Fire,
+        Phys
+    }
+
+    public enum StateObject
+    {
+        IDLE,
+        Action
+    }
+
     [Signal]
     public delegate void UpdateUI(Objects obj);
 
     [Export]
     public ObjectsType type = ObjectsType.Generator;
+
+    [Export]
+    public string title = "Unstable Generator";
 
     [Export]
     public float maxCapacity = 100.0f;
@@ -30,6 +47,21 @@ public class Objects : Spatial
     [Export]
     public float consumeIDLE = 0.0f;
 
+    [Export]
+    public DamageType damageType = DamageType.None;
+
+    [Export]
+    public float minDamage = 0.0f;
+
+    [Export]
+    public float maxDamage = 0.0f;
+
+    [Export]
+    public int scrapCost = 10;
+    [Export]
+    public float attackCD = 0.2f;
+
+
     private float _instability = 1.0f;
     private float _generatorSelector = 20.0f;
     private float _charge = 0.0f;
@@ -41,6 +73,8 @@ public class Objects : Spatial
     private SimpleIA _focus = null;
     private float fireCD = 0.1f;
 
+    private StateObject state = StateObject.IDLE;
+
     public override void _Ready()
     {
         _canon = GetNodeOrNull<Spatial>("Canon");
@@ -50,9 +84,20 @@ public class Objects : Spatial
             area.Connect("body_entered", this, "OnBodyEntered");
             area.Connect("body_exited", this, "OnBodyExited");
         }
-        _generatorSelector = GD.Randf();
+        _generatorSelector = (float)GD.RandRange(GetProductMin(), GetProductMax());
         _eventTimer = 1.0f;
         EmitSignal(nameof(UpdateUI), this);
+    }
+
+    public void MouseEnter()
+    {
+        HUD.Instance?.FocusObject(this);
+        EmitSignal(nameof(UpdateUI), this);
+    }
+
+    public void MouseExit()
+    {
+        HUD.Instance?.UnfocusObject(this);
     }
 
     public void OnBodyEntered(Node body)
@@ -75,16 +120,25 @@ public class Objects : Spatial
         }
     }
 
+    public void Hit(float dmg)
+    {
+        _instability += dmg;
+    }
+
     public override void _Process(float delta)
     {
         _eventTimer -= delta;
         _instability = Mathf.Max(_instability - 0.01f * delta, 1.0f);
+        if (_focus == null || IsInstanceValid(_focus) == false || _focus.IsInsideTree() == false)
+        {
+            _focus = null;
+        }
         switch (type)
         {
             case ObjectsType.Generator:
                 if (_eventTimer <= 0.0f)
                 {
-                    _generatorSelector = Mathf.Clamp(_generatorSelector + (GD.Randf() * 2.0f - 1.0f) * 20.0f * _instability, 50.0f * _instability, 150.0f * _instability);
+                    _generatorSelector = Mathf.Clamp(_generatorSelector + (GD.Randf() * 2.0f - 1.0f) * GetProductVar(), GetProductMin(), GetProductMax());
                     EmitSignal(nameof(UpdateUI), this);
                 }
                 GameData data = GetNode<GameData>("/root/GameData");
@@ -94,6 +148,7 @@ public class Objects : Spatial
                     link.AObject.SendEnergy(_generatorSelector * delta, new List<Objects>() { this });
                     link.BObject.SendEnergy(_generatorSelector * delta, new List<Objects>() { this });
                 }
+                TestInstability();
                 break;
             case ObjectsType.Tower:
                 ConsumeIDLE(delta);
@@ -104,17 +159,38 @@ public class Objects : Spatial
                         fireCD -= delta;
                         if (fireCD <= 0.0f)
                         {
-                            fireCD += 0.1f;
+                            fireCD += attackCD;
                             if (_charge >= consume)
                             {
-                                _charge -= consume;
+                                _charge -= consume * attackCD;
                                 // Fire Here
+                                _focus.Hit((float)GD.RandRange(minDamage, maxDamage));
+                                switch (damageType)
+                                {
+                                    case DamageType.Ice:
+                                        _focus.Freeze();
+                                        EnableParticle(true);
+                                        break;
+                                    case DamageType.Fire:
+                                        EnableParticle(true);
+                                        break;
+                                }
                             }
                         }
                     }
-
+                    else
+                    {
+                        switch (damageType)
+                        {
+                            case DamageType.Ice:
+                            case DamageType.Fire:
+                                EnableParticle(false);
+                                break;
+                        }
+                    }
                     TestCharge();
                 }
+                TestInstability();
                 break;
             case ObjectsType.Storage:
                 ConsumeIDLE(delta);
@@ -124,13 +200,16 @@ public class Objects : Spatial
                     float consu = 0.0f;
                     foreach (Objects obj in linkedTower)
                     {
-                        float a = obj.consume * delta;
-                        if (consu + a > _charge)
+                        if (obj._charge < obj.maxCapacity)
                         {
-                            a = _charge - consu;
+                            float a = obj.consume * delta;
+                            if (consu + a > _charge)
+                            {
+                                a = _charge - consu;
+                            }
+                            obj._charge += a;
+                            consu += a;
                         }
-                        obj._charge += a;
-                        consu += a;
                         if (_charge - consu == 0.0f)
                         {
                             break;
@@ -139,7 +218,24 @@ public class Objects : Spatial
                     _charge -= consu;
                     TestCharge();
                 }
+                TestInstability();
+                if (state == StateObject.Action)
+                {
+                    _charge -= (maxCapacity / 5.0f) * delta;
+                    if (_charge <= 0.0f)
+                    {
+                        _charge = 0.0f;
+                        state = StateObject.IDLE;
+                    }
+                }
                 break;
+        }
+        MeshInstance meshCharge = GetNodeOrNull<MeshInstance>("Interface/Gauge");
+        if (meshCharge != null)
+        {
+            GetNodeOrNull<Spatial>("Interface").Visible = true;
+            ShaderMaterial mat = meshCharge.GetActiveMaterial(0) as ShaderMaterial;
+            mat.SetShaderParam("Charge", GetPctCharge());
         }
         if (_eventTimer <= 0.0f)
         {
@@ -164,6 +260,39 @@ public class Objects : Spatial
         }
     }
 
+    public void EnableParticle(bool enable, bool restart = false)
+    {
+        Spatial weapon = _canon?.GetNodeOrNull<Spatial>("Weapon");
+        for (int i = 0; i < weapon.GetChildCount(); i++)
+        {
+            CPUParticles particle = weapon.GetChildOrNull<CPUParticles>(i);
+            if (particle != null)
+            {
+                if (restart)
+                {
+                    particle.Restart();
+                }
+                else
+                {
+                    if (particle.Emitting != enable)
+                    {
+                        particle.Emitting = enable;
+                    }
+                }
+            }
+        }
+    }
+
+    public void Use()
+    {
+        switch (type)
+        {
+            case ObjectsType.Storage:
+                state = StateObject.Action;
+                break;
+        }
+    }
+
     public void ConsumeIDLE(float delta)
     {
         float sub = consumeIDLE * delta;
@@ -184,6 +313,7 @@ public class Objects : Spatial
         if (_charge > maxCapacity * tolerenceCapacityPct)
         {
             // Etat dead
+            Death();
         }
         else if (_charge > maxCapacity)
         {
@@ -195,9 +325,84 @@ public class Objects : Spatial
         }
     }
 
+    public void AudioChange(string audioSrc, bool play)
+    {
+        AudioStreamPlayer3D audio = GetNodeOrNull<AudioStreamPlayer3D>(audioSrc);
+        if (audio != null)
+        {
+            if (play && audio.Playing == false)
+            {
+                audio.Play();
+            }
+            if (play == false && audio.Playing)
+            {
+                audio.Stop();
+            }
+        }
+    }
+
+    public void TestInstability()
+    {
+        if (_instability >= 2.0)
+        {
+            // dead
+            Death();
+        }
+        else
+        {
+            // Critique
+            AudioChange("Alarm", (_instability >= 1.8f));
+        }
+    }
+
+    public void Death()
+    {
+        GameData data = GetNode<GameData>("/root/GameData");
+        if (type == ObjectsType.Generator)
+        {
+            data.GameOver();
+            return;
+        }
+        data.LinkFree(this);
+        data.SpwanSound(GlobalTransform.origin);
+
+        GetParent().RemoveChild(this);
+        this.QueueFree();
+    }
+
     public float GetPctCharge()
     {
         return _charge / maxCapacity;
+    }
+
+    public float GetProduct()
+    {
+        return _generatorSelector;
+    }
+
+    public float GetProductPct()
+    {
+        return _generatorSelector / GetProductMax();
+    }
+
+    public float GetInstability()
+    {
+        return _instability;
+    }
+
+    public float GetProductVar()
+    {
+        return 5.0f * _instability;
+    }
+
+    public float GetProductMin()
+    {
+        return 5.0f * _instability;
+    }
+
+    public float GetProductMax()
+    {
+        return 50.0f * _instability;
     }
 
     public List<Objects> GetLinkedTower(Objects actual, List<Objects> blackList)

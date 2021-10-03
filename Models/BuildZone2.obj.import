@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/BuildZone2.obj-6075c2ce02ffd81391e89e725b90e44c.mesh"
+
+[deps]
+
+files=[ "res://.import/BuildZone2.obj-6075c2ce02ffd81391e89e725b90e44c.mesh" ]
+
+source_file="res://Models/BuildZone2.obj"
+dest_files=[ "res://.import/BuildZone2.obj-6075c2ce02ffd81391e89e725b90e44c.mesh", "res://.import/BuildZone2.obj-6075c2ce02ffd81391e89e725b90e44c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

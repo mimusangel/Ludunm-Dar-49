@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/explo_try2.mp3-239edc506350deab6267e89a4dfd8302.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/explo_try2.mp3"
+dest_files=[ "res://.import/explo_try2.mp3-239edc506350deab6267e89a4dfd8302.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

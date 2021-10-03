@@ -1,13 +1,18 @@
-[gd_resource type="VisualShader" load_steps=2 format=2]
+[gd_resource type="VisualShader" load_steps=3 format=2]
 
-[sub_resource type="VisualShaderNodeTextureUniform" id=14]
+[sub_resource type="VisualShaderNodeTextureUniform" id=1]
 uniform_name = "albedo"
 
+[sub_resource type="VisualShaderNodeColorUniform" id=3]
+uniform_name = "Emission"
+
 [resource]
+resource_local_to_scene = true
 code = "shader_type spatial;
 render_mode cull_disabled, specular_schlick_ggx;
 
 uniform sampler2D albedo;
+uniform vec4 Emission : hint_color;
 
 
 
@@ -26,8 +31,13 @@ void fragment() {
 		n_out2p1 = n_tex_read.a;
 	}
 
+// ColorUniform:4
+	vec3 n_out4p0 = Emission.rgb;
+	float n_out4p1 = Emission.a;
+
 // Output:0
 	ALBEDO = n_out2p0;
+	EMISSION = n_out4p0;
 
 }
 
@@ -36,8 +46,10 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -389.5, 61.25 )
+graph_offset = Vector2( -398.75, 158 )
 modes/cull = 2
-nodes/fragment/2/node = SubResource( 14 )
-nodes/fragment/2/position = Vector2( -20, 140 )
-nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0 )
+nodes/fragment/2/node = SubResource( 1 )
+nodes/fragment/2/position = Vector2( -260, 60 )
+nodes/fragment/4/node = SubResource( 3 )
+nodes/fragment/4/position = Vector2( -240, 260 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0, 4, 0, 0, 5 )

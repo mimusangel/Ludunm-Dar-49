@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/deflagration_lance_flamme.mp3-14dfb1bca77bcc5d70edb262b87c7321.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/deflagration_lance_flamme.mp3"
+dest_files=[ "res://.import/deflagration_lance_flamme.mp3-14dfb1bca77bcc5d70edb262b87c7321.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

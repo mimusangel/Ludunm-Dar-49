@@ -3,5 +3,6 @@
     Weapon = 0,
     Link,
     Repeater,
-    Tower
+    Tower,
+    Hand
 }

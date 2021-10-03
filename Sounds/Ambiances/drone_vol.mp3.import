@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/drone_vol.mp3-8e1f109b0c9737c8561354d82ae222f4.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/drone_vol.mp3"
+dest_files=[ "res://.import/drone_vol.mp3-8e1f109b0c9737c8561354d82ae222f4.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

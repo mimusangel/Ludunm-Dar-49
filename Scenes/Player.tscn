@@ -117,3 +117,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 1.4, -0.6 )
 material_override = SubResource( 8 )
 mesh = SubResource( 9 )
 material/0 = null
+
+[node name="SpotLight" type="SpotLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.43091, -0.618649 )

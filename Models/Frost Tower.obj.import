@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Frost Tower.obj-50f2d1f243028066aabd94c5367d2682.mesh"
+
+[deps]
+
+files=[ "res://.import/Frost Tower.obj-50f2d1f243028066aabd94c5367d2682.mesh" ]
+
+source_file="res://Models/Frost Tower.obj"
+dest_files=[ "res://.import/Frost Tower.obj-50f2d1f243028066aabd94c5367d2682.mesh", "res://.import/Frost Tower.obj-50f2d1f243028066aabd94c5367d2682.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

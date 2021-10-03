@@ -74,7 +74,7 @@ public class GameData : Node
 
     public void RemoveDateCable(LinkData data)
     {
-        GetTree().CurrentScene.GetNode("World/Navigation/NavigationMeshInstance").RemoveChild(data.cable);
+        GetTree().CurrentScene.GetNode("World").RemoveChild(data.cable);
         data.cable.QueueFree();
         listLink.Remove(data);
     }
@@ -85,29 +85,65 @@ public class GameData : Node
         {
             Objects startObj = start.GetParent() as Objects;
             Objects endObj = end.GetParent() as Objects;
-            Vector3 A = start.GlobalTransform.origin;
-            Vector3 B = end.GlobalTransform.origin;
-            Node cable = GD.Load<PackedScene>("res://Scenes/Cable.tscn").Instance();
-            if (cable is Spatial)
+            if (startObj != endObj)
             {
-                Spatial spaceCable = cable as Spatial;
-                spaceCable.Transform = spaceCable.Transform.LookingAt((B - A), Vector3.Up);
-                float dist = A.DistanceTo(B);
-                spaceCable.Scale = new Vector3(1.0f, 1.0f, dist);
-                spaceCable.Translation = B;
+                Vector3 A = start.GlobalTransform.origin;
+                Vector3 B = end.GlobalTransform.origin;
+                Node cable = GD.Load<PackedScene>("res://Scenes/Cable.tscn").Instance();
+                if (cable is Spatial)
+                {
+                    Spatial spaceCable = cable as Spatial;
+                    spaceCable.Transform = spaceCable.Transform.LookingAt((B - A), Vector3.Up);
+                    float dist = A.DistanceTo(B);
+                    spaceCable.Scale = new Vector3(1.0f, 1.0f, dist);
+                    spaceCable.Translation = B;
+
+                    if (cable is MeshInstance)
+                    {
+                        MeshInstance mesh = cable as MeshInstance;
+                        ShaderMaterial mat = (ShaderMaterial)mesh.GetActiveMaterial(0);
+                        mat.SetShaderParam("CableColor", Colors.DarkGray);
+                        mat.SetShaderParam("GravityForce", -0.05f * dist);
+                    }
+
+                }
+                GetTree().CurrentScene.GetNode("World").AddChild(cable);
+                LinkData newData = new LinkData()
+                {
+                    A = start,
+                    AObject = startObj,
+                    B = end,
+                    BObject = endObj,
+                    cable = cable
+                };
+                listLink.Add(newData);
             }
-            GetTree().CurrentScene.GetNode("World/Navigation/NavigationMeshInstance").AddChild(cable);
-            LinkData newData = new LinkData()
-            {
-                A = start,
-                AObject = startObj,
-                B = end,
-                BObject = endObj,
-                cable = cable
-            };
-            listLink.Add(newData);
             return true;
         }
         return false;
+    }
+
+    public void LinkFree(Objects obj)
+    {
+        var links = GetLink(obj);
+        for (int i = 0; i < links.Count; i++)
+        {
+            RemoveDateCable(links[i]);
+        }
+    }
+
+    public void GameOver()
+    {
+        listLink.Clear();
+        GetTree().ChangeScene("res://Scenes/MainMenu.tscn");
+    }
+
+    public void SpwanSound(Vector3 pos, string pathSound = "res://Sounds/Ambiances/explo_try2.mp3")
+    {
+        var audio = GD.Load<PackedScene>("res://Scenes/TempSound.tscn").Instance<AudioStreamPlayer3D>();
+        audio.Stream = GD.Load<AudioStream>(pathSound);
+        audio.Translation = pos;
+        audio.Play();
+        GetTree().CurrentScene.AddChild(audio);
     }
 }

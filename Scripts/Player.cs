@@ -26,7 +26,7 @@ public class Player : KinematicBody
 
     private Camera _camera;
 
-    private GadgetType _gadget = GadgetType.Weapon;
+    private GadgetType _gadget = GadgetType.Hand;
     public GadgetType gadget
     {
         get
@@ -51,22 +51,14 @@ public class Player : KinematicBody
         }
     }
 
+    public int scrap = 0;
+
     public override void _EnterTree()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        Instance = this;
     }
 
-    public override void _ExitTree()
-    {
-        if (Instance != this)
-        {
-            Instance = null;
-        }
-    }
-
+    Spatial _tmpCable;
     public override void _Ready()
     {
         _camera = GetNode<Camera>("Camera");
@@ -110,7 +102,7 @@ public class Player : KinematicBody
                 timeTest = 0.0f;
                 if (_camera != null)
                 {
-                    string resPath = "res://Scenes/Objects/TowerTest.tscn";
+                    string resPath = "res://Scenes/Objects/Capacitor.tscn";
                     if (_gadget == GadgetType.Repeater)
                     {
                         resPath = "res://Scenes/Objects/Repeater.tscn";
@@ -120,21 +112,26 @@ public class Player : KinematicBody
                         switch (_gadgetDataID)
                         {
                             case 0:
+                                resPath = "res://Scenes/Objects/Capacitor.tscn";
+                                break;
+                            case 1:
                                 resPath = "res://Scenes/Objects/TowerIce.tscn";
+                                break;
+                            case 2:
+                                resPath = "res://Scenes/Objects/TowerFire.tscn";
                                 break;
                         }
                     }
                     ray = new PlayerRay()
                     {
-                        
                         position = _camera.ProjectRayOrigin(button.Position),
                         direction = _camera.ProjectRayNormal(button.Position),
                         VisualObject = GD.Load<PackedScene>(resPath).Instance()
                     };
                     if (ray.VisualObject != null)
                     {
-                        ray.VisualObject.GetNode<PhysicsBody>("Object/Body").CollisionLayer = 0;
-                        GetTree().CurrentScene.GetNode("World/Navigation/NavigationMeshInstance").AddChild(ray.VisualObject);
+                        GetTree().CurrentScene.GetNode("World").AddChild(ray.VisualObject);
+                        PlaceMode(true);
                     }
                     PlaceTowerOver(0.0f);
                 }
@@ -145,12 +142,12 @@ public class Player : KinematicBody
                 {
                     if (!ray.Placeable)
                     {
-                        GetTree().CurrentScene.GetNode("World/Navigation/NavigationMeshInstance").RemoveChild(ray.VisualObject);
+                        GetTree().CurrentScene.GetNode("World").RemoveChild(ray.VisualObject);
                         ray.VisualObject.QueueFree();
                     }
                     else
                     {
-                        ray.VisualObject.GetNode<PhysicsBody>("Object/Body").CollisionLayer = 1;
+                        PlaceMode(false);
                     }
                 }
                 ray = null;
@@ -172,7 +169,14 @@ public class Player : KinematicBody
             {
                 if (collid.Count > 0)
                 {
+                    if (_tmpCable == null)
+                    {
+                        var tmp = GD.Load<PackedScene>("res://Scenes/Cable.tscn").Instance();
+                        GetTree().CurrentScene.AddChild(tmp);
+                        _tmpCable = tmp as Spatial;
+                    }
                     startLink = (PhysicsBody)collid["collider"];
+                    _tmpCable.Visible = true;
                 }
             }
             else
@@ -194,6 +198,10 @@ public class Player : KinematicBody
                             data.AddDataCable(startLink, endLink);
                         }
                     }
+                }
+                if (_tmpCable != null)
+                {
+                    _tmpCable.Visible = false;
                 }
                 startLink = null;
             }
@@ -218,11 +226,19 @@ public class Player : KinematicBody
             if (@event is InputEventMouseButton)
             {
                 InputEventMouseButton button = @event as InputEventMouseButton;
-
+                
                 switch (_gadget)
                 {
                     case GadgetType.Weapon:
-
+                        if (_lastObjFocus != null)
+                        {
+                            GameData data = GetNode<GameData>("/root/GameData");
+                            data.LinkFree(_lastObjFocus);
+                            GetTree().CurrentScene.GetNode("World").RemoveChild(_lastObjFocus);
+                            _lastObjFocus.QueueFree();
+                            _lastObjFocus.MouseExit();
+                            _lastObjFocus = null;
+                        }
                         break;
                     case GadgetType.Link:
                         ControlActionLink(button);
@@ -230,6 +246,18 @@ public class Player : KinematicBody
                     case GadgetType.Repeater:
                     case GadgetType.Tower:
                         ControlActionPlaceTower(button);
+                        break;
+                    case GadgetType.Hand:
+                        if (button.ButtonIndex == (int)ButtonList.Left)
+                        {
+                            if (_lastObjFocus != null)
+                            {
+                                if (button.Pressed == false)
+                                {
+                                    _lastObjFocus.Use();
+                                }
+                            }
+                        }
                         break;
                 }
             }
@@ -243,9 +271,9 @@ public class Player : KinematicBody
         if (onFloor)
         {
             float forward = (_backward ? 1.0f : 0.0f) - (_forward ? 1.0f : 0.0f);
-            _speed = Mathf.Max(_speed, 5.0f);
+            _speed = Mathf.Max(_speed, 10.0f);
             _speed += (_speed * 1.5f * Mathf.Abs(forward)) * delta;
-            _speed = Mathf.Min(_speed, 10.0f);
+            _speed = Mathf.Min(_speed, 20.0f);
             _velocity = this.Transform.basis.z * forward;
         }
         else
@@ -284,27 +312,48 @@ public class Player : KinematicBody
                 var obj = ray.VisualObject as Spatial;
                 var body = obj.GetNode<PhysicsBody>("Object/Body");
                 var space = GetWorld().DirectSpaceState;
-                var collid = space.IntersectRay(ray.position, ray.position + ray.direction * 20.0f,
-                    new Godot.Collections.Array() { this.GetRid(), body.GetRid() }, 2);
-
+                var collid = space.IntersectRay(ray.position, ray.position + ray.direction * 15.0f,
+                    new Godot.Collections.Array() { this.GetRid() },
+                    3);
+                obj.Visible = true;
                 if (collid.Count > 0)
                 {
                     obj.Translation = (Vector3)collid["position"];
-
-                    timeTest -= delta;
-                    if (timeTest <= 0.0f)
+                    if (collid["collider"] is PhysicsBody)
                     {
-                        timeTest += 1.0f;
+                        PhysicsBody collidBody = (PhysicsBody)collid["collider"];
+                        if ((collidBody.CollisionLayer & 2) == 2)
+                        {
+                            timeTest -= delta;
+                            if (timeTest <= 0.0f)
+                            {
+                                timeTest += 0.2f;
 
-                        var shape = body.GetNode<CollisionShape>("CollisionShape");
-                        PhysicsShapeQueryParameters query = new PhysicsShapeQueryParameters();
-                        query.SetShape(shape.Shape);
-                        query.Exclude = new Godot.Collections.Array() { body.GetRid() };
-                        query.Transform = obj.Transform;
-                        query.CollisionMask = 1;
-                        var result = space.IntersectShape(query);
-                        ray.Placeable = result.Count <= 0;
+                                var shape = body.GetNode<CollisionShape>("CollisionShape");
+                                PhysicsShapeQueryParameters query = new PhysicsShapeQueryParameters();
+                                query.SetShape(shape.Shape);
+                                query.Exclude = new Godot.Collections.Array();
+                                query.Transform = obj.Transform;
+                                query.CollisionMask = 1;
+                                var result = space.IntersectShape(query);
+                                ray.Placeable = result.Count <= 0;
+                            }
+                        }
+                        else
+                        {
+                            ray.Placeable = false;
+                        }
                     }
+                    else
+                    {
+                        ray.Placeable = false; 
+                    }
+                    PlaceMode(true);
+                }
+                else
+                {
+                    ray.Placeable = false;
+                    obj.Visible = false;
                 }
             }
         }
@@ -313,12 +362,87 @@ public class Player : KinematicBody
     public override void _PhysicsProcess(float delta)
     {
         Movement(delta);
+        RayForInterface();
         switch (_gadget)
         {
+            case GadgetType.Link:
+                UpdateCable();
+                break;
             case GadgetType.Repeater:
             case GadgetType.Tower:
                 PlaceTowerOver(delta);
                 break;
+        }
+    }
+
+    public void UpdateCable()
+    {
+        if (startLink == null || _tmpCable == null)
+        {
+            return;
+        }
+        var origin = _camera.ProjectRayOrigin(GetViewport().GetMousePosition());
+        var direction = _camera.ProjectRayNormal(GetViewport().GetMousePosition());
+        var space = GetWorld().DirectSpaceState;
+        var collid = space.IntersectRay(origin, origin + direction * 20.0f, new Godot.Collections.Array() { this.GetRid() }, 4);
+        Vector3 A = startLink.GlobalTransform.origin;
+        Vector3 B = GlobalTransform.origin + Vector3.Up;
+        if (collid.Count > 0)
+        {
+            PhysicsBody body = (PhysicsBody)collid["collider"];
+            if (startLink != body)
+            {
+                Objects startObj = startLink.GetParent() as Objects;
+                Objects endObj = body.GetParent() as Objects;
+                if (startObj != endObj)
+                {
+                    B = body.GlobalTransform.origin;
+                }
+            }
+        }
+        _tmpCable.Translation = B;
+        Vector3 dir = (B - A).Normalized();
+        _tmpCable.LookAt(_tmpCable.GlobalTransform.origin + dir, Vector3.Up);
+        float dist = A.DistanceTo(B);
+        _tmpCable.Scale = new Vector3(1.0f, 1.0f, dist);
+        if (_tmpCable is MeshInstance)
+        {
+            MeshInstance mesh = _tmpCable as MeshInstance;
+            ShaderMaterial mat = (ShaderMaterial)mesh.GetActiveMaterial(0);
+            mat.SetShaderParam("CableColor", new Color(Colors.DarkGray, 0.8f));
+            mat.SetShaderParam("GravityForce", -0.05f * dist);
+        }
+    }
+
+    private Objects _lastObjFocus = null;
+    public void RayForInterface()
+    {
+        var origin = _camera.ProjectRayOrigin(GetViewport().GetMousePosition());
+        var direction = _camera.ProjectRayNormal(GetViewport().GetMousePosition());
+        var space = GetWorld().DirectSpaceState;
+        var collid = space.IntersectRay(origin, origin + direction * 20.0f, new Godot.Collections.Array() { this.GetRid() });
+        if (collid.Count > 0)
+        {
+            if (_lastObjFocus != null)
+            {
+                _lastObjFocus.MouseExit();
+                _lastObjFocus = null;
+            }
+            PhysicsBody body = (PhysicsBody)collid["collider"];
+            Objects obj = body.GetNodeOrNull<Objects>("../..");
+            if (obj != null && obj != _lastObjFocus)
+            {
+                obj.MouseEnter();
+                _lastObjFocus = obj;
+            }
+        }
+        else
+        {
+            if (_lastObjFocus != null)
+            {
+                _lastObjFocus.MouseExit();
+                _lastObjFocus = null;
+            }
         }
     }
 
@@ -334,4 +458,44 @@ public class Player : KinematicBody
         return true;
     }
 
+    public void PlaceMode(bool enable)
+    {
+        if (ray.VisualObject != null)
+        {
+            Spatial visu = ray.VisualObject.GetNodeOrNull<Spatial>("Interface");
+            if (visu != null)
+            {
+                visu.Visible = !enable;
+            }
+            for (int i = 0; i < ray.VisualObject.GetChildCount(); i++)
+            {
+                Node child = ray.VisualObject.GetChildOrNull<Node>(i);
+                if (child != null)
+                {
+                    if (child is MeshInstance)
+                    {
+                        MeshInstance mesh = child as MeshInstance;
+                        for (int j = 0; j < mesh.GetSurfaceMaterialCount(); j++)
+                        {
+                            ShaderMaterial mat = (ShaderMaterial)mesh.GetActiveMaterial(j);
+                            if (mat.Shader.HasParam("Emission"))
+                            {
+                                mat.SetShaderParam("Emission", ray.Placeable ? Colors.Black : Colors.Red);
+
+                            }
+                        }
+                        for (int j = 0; j < mesh.GetChildCount(); j++)
+                        {
+                            PhysicsBody body = mesh.GetChildOrNull<PhysicsBody>(j);
+                            if (body != null)
+                            {
+                                body.CollisionLayer = (uint)(enable ? 0 : 1);
+                                body.CollisionMask = (uint)(enable ? 0 : 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

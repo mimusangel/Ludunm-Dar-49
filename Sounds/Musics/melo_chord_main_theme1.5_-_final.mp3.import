@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/melo_chord_main_theme1.5_-_final.mp3-71e232b971840fca97cc34f0e8f1dde3.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Musics/melo_chord_main_theme1.5_-_final.mp3"
+dest_files=[ "res://.import/melo_chord_main_theme1.5_-_final.mp3-71e232b971840fca97cc34f0e8f1dde3.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -15,7 +15,7 @@ public class CircularMenu : Control
 
         for (int i = 0; i < totalChild; i++)
         {
-            float ang = step * (float)i - step;
+            float ang = step * (float)i;
             float x = Mathf.Sin(Mathf.Deg2Rad(ang));
             float y = Mathf.Cos(Mathf.Deg2Rad(ang));
             Node node = GetChild(i);
