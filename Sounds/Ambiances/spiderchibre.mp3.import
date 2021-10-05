@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/spiderchibre.mp3-f8b2cc751f96eadcf875bc685b68f3de.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/spiderchibre.mp3"
+dest_files=[ "res://.import/spiderchibre.mp3-f8b2cc751f96eadcf875bc685b68f3de.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

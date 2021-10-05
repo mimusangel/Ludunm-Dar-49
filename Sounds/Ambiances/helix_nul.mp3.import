@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/helix_nul.mp3-89134ea35838835b2b6fa3238dbba7e3.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/helix_nul.mp3"
+dest_files=[ "res://.import/helix_nul.mp3-89134ea35838835b2b6fa3238dbba7e3.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

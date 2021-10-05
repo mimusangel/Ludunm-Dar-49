@@ -7,7 +7,7 @@
 resource_local_to_scene = true
 shader = ExtResource( 2 )
 shader_param/GravityForce = -0.5
-shader_param/CableColor = null
+shader_param/CableColor = Color( 0.529412, 0.517647, 0, 1 )
 
 [node name="Cable" type="MeshInstance"]
 mesh = ExtResource( 1 )

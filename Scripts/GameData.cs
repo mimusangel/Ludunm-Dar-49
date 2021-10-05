@@ -102,8 +102,8 @@ public class GameData : Node
                     {
                         MeshInstance mesh = cable as MeshInstance;
                         ShaderMaterial mat = (ShaderMaterial)mesh.GetActiveMaterial(0);
-                        mat.SetShaderParam("CableColor", Colors.DarkGray);
-                        mat.SetShaderParam("GravityForce", -0.05f * dist);
+                        mat.SetShaderParam("CableColor", new Color(0xff878400));
+                        mat.SetShaderParam("GravityForce", -0.01f * dist);
                     }
 
                 }
@@ -135,7 +135,7 @@ public class GameData : Node
     public void GameOver()
     {
         listLink.Clear();
-        GetTree().ChangeScene("res://Scenes/MainMenu.tscn");
+        GetTree().ChangeScene("res://Scenes/GameOver.tscn");
     }
 
     public void SpwanSound(Vector3 pos, string pathSound = "res://Sounds/Ambiances/explo_try2.mp3")

@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/MainMenu.cs" type="Script" id=1]
 [ext_resource path="res://Sounds/Musics/basic_cp_type.mp3" type="AudioStream" id=2]
+[ext_resource path="res://Scripts/SettingMenu.cs" type="Script" id=3]
+[ext_resource path="res://Textures/Scrap v0.1.png" type="Texture" id=4]
+[ext_resource path="res://Textures/hand.png" type="Texture" id=5]
+[ext_resource path="res://Textures/WeaponIcon.png" type="Texture" id=6]
+[ext_resource path="res://Textures/LinkIcon.png" type="Texture" id=7]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -10,39 +15,344 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+autoplay = true
+bus = "Music"
+
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
 anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = -80.0
-margin_right = 120.0
+margin_left = -100.0
+margin_top = -100.0
+margin_right = 100.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="BtnPlay" type="Button" parent="VBoxContainer"]
-margin_right = 100.0
-margin_bottom = 20.0
+margin_right = 200.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 0, 40 )
 text = "Play"
 
-[node name="BtnSetting" type="Button" parent="VBoxContainer"]
-margin_top = 24.0
-margin_right = 100.0
-margin_bottom = 44.0
-disabled = true
-text = "Settings"
-
 [node name="BtnExit" type="Button" parent="VBoxContainer"]
-margin_top = 48.0
-margin_right = 100.0
-margin_bottom = 68.0
+margin_top = 44.0
+margin_right = 200.0
+margin_bottom = 84.0
+rect_min_size = Vector2( 0, 40 )
 text = "Exit"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 2 )
-autoplay = true
-bus = "Music"
+[node name="Panel" type="Panel" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -205.0
+margin_top = -100.0
+margin_right = -5.0
+margin_bottom = 100.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+text = "Setting"
+align = 1
+valign = 1
+
+[node name="Label2" type="Label" parent="Panel/VBoxContainer"]
+margin_top = 24.0
+margin_right = 200.0
+margin_bottom = 38.0
+rect_min_size = Vector2( 0, 14 )
+text = "Master"
+valign = 1
+
+[node name="Master" type="HSlider" parent="Panel/VBoxContainer"]
+margin_top = 42.0
+margin_right = 200.0
+margin_bottom = 58.0
+rect_min_size = Vector2( 120, 0 )
+min_value = -80.0
+max_value = 6.0
+
+[node name="Label3" type="Label" parent="Panel/VBoxContainer"]
+margin_top = 62.0
+margin_right = 200.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 0, 14 )
+text = "Music"
+valign = 1
+
+[node name="Music" type="HSlider" parent="Panel/VBoxContainer"]
+margin_top = 80.0
+margin_right = 200.0
+margin_bottom = 96.0
+rect_min_size = Vector2( 120, 0 )
+min_value = -80.0
+max_value = 6.0
+
+[node name="Label4" type="Label" parent="Panel/VBoxContainer"]
+margin_top = 100.0
+margin_right = 200.0
+margin_bottom = 114.0
+rect_min_size = Vector2( 0, 14 )
+text = "Ambiance"
+valign = 1
+
+[node name="Ambiance" type="HSlider" parent="Panel/VBoxContainer"]
+margin_top = 118.0
+margin_right = 200.0
+margin_bottom = 134.0
+rect_min_size = Vector2( 120, 0 )
+min_value = -80.0
+max_value = 6.0
+
+[node name="Label5" type="Label" parent="Panel/VBoxContainer"]
+margin_top = 138.0
+margin_right = 200.0
+margin_bottom = 152.0
+rect_min_size = Vector2( 0, 14 )
+text = "Effect"
+valign = 1
+
+[node name="Effect" type="HSlider" parent="Panel/VBoxContainer"]
+margin_top = 156.0
+margin_right = 200.0
+margin_bottom = 172.0
+rect_min_size = Vector2( 120, 0 )
+min_value = -80.0
+max_value = 6.0
+
+[node name="Panel3" type="Panel" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -424.0
+margin_top = -100.0
+margin_right = -224.0
+margin_bottom = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel3"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Panel3/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+text = "Control"
+align = 1
+valign = 1
+
+[node name="Label2" type="Label" parent="Panel3/VBoxContainer"]
+margin_top = 24.0
+margin_right = 200.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 0, 20 )
+text = "WS / ZS : forward"
+valign = 1
+
+[node name="Label3" type="Label" parent="Panel3/VBoxContainer"]
+margin_top = 48.0
+margin_right = 200.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 0, 20 )
+text = "AD / QD : Rotate"
+valign = 1
+
+[node name="Label4" type="Label" parent="Panel3/VBoxContainer"]
+margin_top = 72.0
+margin_right = 200.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 0, 20 )
+text = "Space : Jump !"
+valign = 1
+
+[node name="Label5" type="Label" parent="Panel3/VBoxContainer"]
+margin_top = 96.0
+margin_right = 200.0
+margin_bottom = 144.0
+rect_min_size = Vector2( 0, 20 )
+text = "Left Click : 
+> Action
+> Place Tower"
+valign = 1
+
+[node name="Label6" type="Label" parent="Panel3/VBoxContainer"]
+margin_top = 148.0
+margin_right = 200.0
+margin_bottom = 168.0
+rect_min_size = Vector2( 0, 20 )
+text = "Right Click :  Select Wheel"
+valign = 1
+
+[node name="Panel4" type="Panel" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -424.0
+margin_top = 110.0
+margin_right = -4.0
+margin_bottom = 160.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Panel4"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = 3.0
+rect_min_size = Vector2( 0, 45 )
+text = "Connect your tower to the capacitor and drain it regularly,
+this will avoid explosions
+"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+margin_bottom = 30.0
+text = "Re:Volt"
+align = 1
+valign = 2
+
+[node name="Panel2" type="Panel" parent="."]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 5.0
+margin_top = -100.0
+margin_right = 205.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Panel2/VBoxContainer"]
+margin_right = 200.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 0, 20 )
+text = "Information"
+align = 1
+valign = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel2/VBoxContainer"]
+margin_top = 24.0
+margin_right = 200.0
+margin_bottom = 56.0
+
+[node name="TextureRect" type="TextureRect" parent="Panel2/VBoxContainer/HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 4 )
+
+[node name="Label" type="Label" parent="Panel2/VBoxContainer/HBoxContainer"]
+margin_left = 36.0
+margin_top = 9.0
+margin_right = 182.0
+margin_bottom = 23.0
+text = "Scrap ! It's the Money !"
+valign = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel2/VBoxContainer"]
+margin_top = 60.0
+margin_right = 200.0
+margin_bottom = 92.0
+
+[node name="TextureRect" type="TextureRect" parent="Panel2/VBoxContainer/HBoxContainer2"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="Panel2/VBoxContainer/HBoxContainer2"]
+margin_left = 36.0
+margin_right = 181.0
+margin_bottom = 31.0
+text = "Action on the towers,
+emptied the capacitor."
+valign = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel2/VBoxContainer"]
+margin_top = 96.0
+margin_right = 200.0
+margin_bottom = 128.0
+
+[node name="TextureRect" type="TextureRect" parent="Panel2/VBoxContainer/HBoxContainer3"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 7 )
+
+[node name="Label" type="Label" parent="Panel2/VBoxContainer/HBoxContainer3"]
+margin_left = 36.0
+margin_right = 182.0
+margin_bottom = 31.0
+text = "Place a cable between 
+two machines"
+valign = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Panel2/VBoxContainer"]
+margin_top = 132.0
+margin_right = 200.0
+margin_bottom = 164.0
+
+[node name="TextureRect" type="TextureRect" parent="Panel2/VBoxContainer/HBoxContainer4"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="Panel2/VBoxContainer/HBoxContainer4"]
+margin_left = 36.0
+margin_top = 9.0
+margin_right = 156.0
+margin_bottom = 23.0
+text = "Destroy a machine"
+valign = 1
+
+[node name="Label2" type="Label" parent="Panel2/VBoxContainer"]
+margin_top = 168.0
+margin_right = 200.0
+margin_bottom = 233.0
+text = "The machines must be connected to the source you are defending, beware of the variation of Energy!"
+autowrap = true
 
 [connection signal="pressed" from="VBoxContainer/BtnPlay" to="VBoxContainer" method="Play"]
 [connection signal="pressed" from="VBoxContainer/BtnExit" to="VBoxContainer" method="Exit"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Master" to="Panel" method="ChangeMaster"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Music" to="Panel" method="ChangeMusic"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Ambiance" to="Panel" method="ChangeAmbiance"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Effect" to="Panel" method="ChangeEffect"]

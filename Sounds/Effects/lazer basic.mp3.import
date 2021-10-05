@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/lazer basic.mp3-c5d476974126c51a58a7ca695ad90d81.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/lazer basic.mp3"
+dest_files=[ "res://.import/lazer basic.mp3-c5d476974126c51a58a7ca695ad90d81.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

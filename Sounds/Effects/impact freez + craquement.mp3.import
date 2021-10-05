@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/impact freez + craquement.mp3-c7939de866e034e076af94f12b7eaf82.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/impact freez + craquement.mp3"
+dest_files=[ "res://.import/impact freez + craquement.mp3-c7939de866e034e076af94f12b7eaf82.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

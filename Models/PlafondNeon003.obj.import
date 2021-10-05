@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/PlafondNeon003.obj-7c9f71b02b2b6553b4cc32eb8ca7f32d.mesh"
+
+[deps]
+
+files=[ "res://.import/PlafondNeon003.obj-7c9f71b02b2b6553b4cc32eb8ca7f32d.mesh" ]
+
+source_file="res://Models/PlafondNeon003.obj"
+dest_files=[ "res://.import/PlafondNeon003.obj-7c9f71b02b2b6553b4cc32eb8ca7f32d.mesh", "res://.import/PlafondNeon003.obj-7c9f71b02b2b6553b4cc32eb8ca7f32d.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

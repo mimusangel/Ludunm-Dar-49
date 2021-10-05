@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/flammes continues lance flamme.mp3-42e65a846d5dd6d7f45ac0367e73d898.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/flammes continues lance flamme.mp3"
+dest_files=[ "res://.import/flammes continues lance flamme.mp3-42e65a846d5dd6d7f45ac0367e73d898.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

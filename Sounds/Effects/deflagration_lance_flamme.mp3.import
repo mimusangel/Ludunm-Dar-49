@@ -11,5 +11,5 @@ dest_files=[ "res://.import/deflagration_lance_flamme.mp3-14dfb1bca77bcc5d70edb2
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0

@@ -7,3 +7,4 @@
 resource_local_to_scene = true
 shader = ExtResource( 1 )
 shader_param/albedo = ExtResource( 2 )
+shader_param/albedo2 = ExtResource( 2 )

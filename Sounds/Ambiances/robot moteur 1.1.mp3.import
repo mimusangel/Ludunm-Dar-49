@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/robot moteur 1.1.mp3-41d3597af9e4dd6c976b8aa70a22d66b.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/robot moteur 1.1.mp3"
+dest_files=[ "res://.import/robot moteur 1.1.mp3-41d3597af9e4dd6c976b8aa70a22d66b.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

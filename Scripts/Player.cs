@@ -51,7 +51,7 @@ public class Player : KinematicBody
         }
     }
 
-    public int scrap = 0;
+    private int _scrap = 120;
 
     public override void _EnterTree()
     {
@@ -61,7 +61,8 @@ public class Player : KinematicBody
     Spatial _tmpCable;
     public override void _Ready()
     {
-        _camera = GetNode<Camera>("Camera");
+        _camera = GetNode<Camera>("../Camera/Camera");
+        HUD.Instance?.UpdateScrap(_scrap);
     }
 
     private void ControlPlayer(InputEvent @event)
@@ -73,12 +74,14 @@ public class Player : KinematicBody
             switch (key.Scancode)
             {
                 case (int)KeyList.W:
+                case (int)KeyList.Z:
                     _forward = key.Pressed;
                     break;
                 case (int)KeyList.S:
                     _backward = key.Pressed;
                     break;
                 case (int)KeyList.A:
+                case (int)KeyList.Q:
                     _left = key.Pressed;
                     break;
                 case (int)KeyList.D:
@@ -120,6 +123,9 @@ public class Player : KinematicBody
                             case 2:
                                 resPath = "res://Scenes/Objects/TowerFire.tscn";
                                 break;
+                            case 3:
+                                resPath = "res://Scenes/Objects/TowerRailGun.tscn";
+                                break;
                         }
                     }
                     ray = new PlayerRay()
@@ -147,7 +153,15 @@ public class Player : KinematicBody
                     }
                     else
                     {
-                        PlaceMode(false);
+                        if (ray.VisualObject is Objects)
+                        {
+                            Objects obj = ray.VisualObject as Objects;
+                            if (obj.scrapCost <= _scrap)
+                            {
+                                AddScrap(-obj.scrapCost);
+                                PlaceMode(false);
+                            }
+                        }
                     }
                 }
                 ray = null;
@@ -230,8 +244,12 @@ public class Player : KinematicBody
                 switch (_gadget)
                 {
                     case GadgetType.Weapon:
-                        if (_lastObjFocus != null)
+                        if (_lastObjFocus != null && _lastObjFocus.type != Objects.ObjectsType.Generator)
                         {
+                            Spatial scrap = GD.Load<PackedScene>("res://Scenes/Scrap.tscn").Instance<Spatial>();
+                            scrap.Translation = _lastObjFocus.GlobalTransform.origin;
+                            GetTree().CurrentScene.AddChild(scrap);
+
                             GameData data = GetNode<GameData>("/root/GameData");
                             data.LinkFree(_lastObjFocus);
                             GetTree().CurrentScene.GetNode("World").RemoveChild(_lastObjFocus);
@@ -275,6 +293,22 @@ public class Player : KinematicBody
             _speed += (_speed * 1.5f * Mathf.Abs(forward)) * delta;
             _speed = Mathf.Min(_speed, 20.0f);
             _velocity = this.Transform.basis.z * forward;
+            AnimationPlayer animation = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+            if (animation != null)
+            {
+                if (_backward)
+                {
+                    animation.Play("BackWalk");
+                }
+                else  if (_forward)
+                {
+                    animation.Play("Walk");
+                }
+                else
+                {
+                    animation.Play("Idle");
+                }
+            }
         }
         else
         {
@@ -293,7 +327,7 @@ public class Player : KinematicBody
             _gravityVel = new Vector3();
             if (_jump)
             {
-                _gravityVel = -_gravity;
+                _gravityVel = -_gravity * 0.5f;
             }
         }
         _gravityVel = this.MoveAndSlide(_gravityVel, Vector3.Up);
@@ -319,6 +353,12 @@ public class Player : KinematicBody
                 if (collid.Count > 0)
                 {
                     obj.Translation = (Vector3)collid["position"];
+                    if (obj is Objects && ((Objects)obj).scrapCost > _scrap)
+                    {
+                        ray.Placeable = false;
+                        PlaceMode(true);
+                        return;
+                    }
                     if (collid["collider"] is PhysicsBody)
                     {
                         PhysicsBody collidBody = (PhysicsBody)collid["collider"];
@@ -409,7 +449,7 @@ public class Player : KinematicBody
         {
             MeshInstance mesh = _tmpCable as MeshInstance;
             ShaderMaterial mat = (ShaderMaterial)mesh.GetActiveMaterial(0);
-            mat.SetShaderParam("CableColor", new Color(Colors.DarkGray, 0.8f));
+            mat.SetShaderParam("CableColor", new Color(new Color(0xff878400), 0.8f));
             mat.SetShaderParam("GravityForce", -0.05f * dist);
         }
     }
@@ -497,5 +537,11 @@ public class Player : KinematicBody
                 }
             }
         }
+    }
+
+    public void AddScrap(int amount)
+    {
+        _scrap += amount;
+        HUD.Instance?.UpdateScrap(_scrap);
     }
 }

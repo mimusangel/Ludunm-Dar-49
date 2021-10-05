@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/explo try1.mp3-4fa77999b3910b64177acf823647e35d.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/explo try1.mp3"
+dest_files=[ "res://.import/explo try1.mp3-4fa77999b3910b64177acf823647e35d.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

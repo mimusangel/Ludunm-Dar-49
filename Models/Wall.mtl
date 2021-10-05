@@ -1,0 +1,48 @@
+# Blender MTL File: 'Terrain_V2.blend'
+# Material Count: 4
+
+newmtl Base.001
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:\\Users\\mimus\\Desktop\\Models\\CyberPalet.png
+
+newmtl Glow
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\mimus\\Desktop\\Models\\CyberPalet.png
+map_Ke C:\\Users\\mimus\\Desktop\\Models\\CyberPalet.png
+
+newmtl PaletteClassic
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\mimus\\Desktop\\Models\\CyberPalet.png
+
+newmtl PaletteGlow
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\mimus\\Desktop\\Models\\CyberPalet.png
+map_Ke C:\\Users\\mimus\\Desktop\\Models\\CyberPalet.png

@@ -100,15 +100,21 @@ public class Objects : Spatial
         HUD.Instance?.UnfocusObject(this);
     }
 
+    private Queue<SimpleIA> _focusQueue = new Queue<SimpleIA>();
+
     public void OnBodyEntered(Node body)
     {
-        if (_focus != null)
-        {
-            return;
-        }
+        
         if (body is SimpleIA)
         {
-            _focus = body as SimpleIA;
+            if (_focus != null)
+            {
+                _focusQueue.Enqueue(body as SimpleIA);
+            }
+            else
+            {
+                _focus = body as SimpleIA;
+            }
         }
     }
 
@@ -129,10 +135,18 @@ public class Objects : Spatial
     {
         _eventTimer -= delta;
         _instability = Mathf.Max(_instability - 0.01f * delta, 1.0f);
+        if (_focus == null)
+        {
+            if (_focusQueue.Count > 0)
+            {
+                _focus = _focusQueue.Dequeue();
+            }
+        }
         if (_focus == null || IsInstanceValid(_focus) == false || _focus.IsInsideTree() == false)
         {
             _focus = null;
         }
+        GameData data = GetNode<GameData>("/root/GameData");
         switch (type)
         {
             case ObjectsType.Generator:
@@ -141,7 +155,6 @@ public class Objects : Spatial
                     _generatorSelector = Mathf.Clamp(_generatorSelector + (GD.Randf() * 2.0f - 1.0f) * GetProductVar(), GetProductMin(), GetProductMax());
                     EmitSignal(nameof(UpdateUI), this);
                 }
-                GameData data = GetNode<GameData>("/root/GameData");
                 var links = data.GetLink(this);
                 foreach (GameData.LinkData link in links)
                 {
@@ -169,10 +182,16 @@ public class Objects : Spatial
                                 {
                                     case DamageType.Ice:
                                         _focus.Freeze();
+                                        AudioChange("Canon/AttackAudio", true);
                                         EnableParticle(true);
                                         break;
                                     case DamageType.Fire:
+                                        AudioChange("Canon/AttackAudio", true);
                                         EnableParticle(true);
+                                        break;
+                                    case DamageType.Phys:
+                                        data.SpwanSound(GlobalTransform.origin, "res://Sounds/Effects/lazer basic.mp3");
+                                        EnableParticle(true, true);
                                         break;
                                 }
                             }
@@ -185,10 +204,22 @@ public class Objects : Spatial
                             case DamageType.Ice:
                             case DamageType.Fire:
                                 EnableParticle(false);
+                                AudioChange("Canon/AttackAudio", false);
                                 break;
                         }
                     }
                     TestCharge();
+                }
+                else
+                {
+                    switch (damageType)
+                    {
+                        case DamageType.Ice:
+                        case DamageType.Fire:
+                            EnableParticle(false);
+                            AudioChange("Canon/AttackAudio", false);
+                            break;
+                    }
                 }
                 TestInstability();
                 break;
@@ -202,7 +233,7 @@ public class Objects : Spatial
                     {
                         if (obj._charge < obj.maxCapacity)
                         {
-                            float a = obj.consume * delta;
+                            float a = obj.consume * delta * 2.0f;
                             if (consu + a > _charge)
                             {
                                 a = _charge - consu;
@@ -260,24 +291,30 @@ public class Objects : Spatial
         }
     }
 
-    public void EnableParticle(bool enable, bool restart = false)
+    public void EnableParticle(bool enable, bool random = false)
     {
         Spatial weapon = _canon?.GetNodeOrNull<Spatial>("Weapon");
+        if (random)
+        {
+            int i = (int)(GD.Randi() % weapon.GetChildCount());
+            CPUParticles particle = weapon.GetChildOrNull<CPUParticles>(i);
+            if (particle != null)
+            {
+                if (particle.Emitting != enable)
+                {
+                    particle.Emitting = enable;
+                }
+            }
+            return;
+        }
         for (int i = 0; i < weapon.GetChildCount(); i++)
         {
             CPUParticles particle = weapon.GetChildOrNull<CPUParticles>(i);
             if (particle != null)
             {
-                if (restart)
+                if (particle.Emitting != enable)
                 {
-                    particle.Restart();
-                }
-                else
-                {
-                    if (particle.Emitting != enable)
-                    {
-                        particle.Emitting = enable;
-                    }
+                    particle.Emitting = enable;
                 }
             }
         }
@@ -315,13 +352,9 @@ public class Objects : Spatial
             // Etat dead
             Death();
         }
-        else if (_charge > maxCapacity)
-        {
-            // Etat Critique
-        }
         else
         {
-            // Etat Ok !
+            AudioChange("Alarm", (_charge > maxCapacity));
         }
     }
 
@@ -351,7 +384,7 @@ public class Objects : Spatial
         else
         {
             // Critique
-            AudioChange("Alarm", (_instability >= 1.8f));
+            AudioChange("Alarm", (_instability >= 1.6f));
         }
     }
 
@@ -365,6 +398,10 @@ public class Objects : Spatial
         }
         data.LinkFree(this);
         data.SpwanSound(GlobalTransform.origin);
+        
+        Spatial scrap = GD.Load<PackedScene>("res://Scenes/Scrap.tscn").Instance<Spatial>();
+        scrap.Translation = GlobalTransform.origin;
+        GetTree().CurrentScene.AddChild(scrap);
 
         GetParent().RemoveChild(this);
         this.QueueFree();
@@ -397,12 +434,12 @@ public class Objects : Spatial
 
     public float GetProductMin()
     {
-        return 5.0f * _instability;
+        return 10.0f * _instability;
     }
 
     public float GetProductMax()
     {
-        return 50.0f * _instability;
+        return 75.0f * _instability;
     }
 
     public List<Objects> GetLinkedTower(Objects actual, List<Objects> blackList)

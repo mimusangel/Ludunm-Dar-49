@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/tank_kivol.mp3-47cf1a148a3a6c06ea3ea301fb08f67f.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Ambiances/tank_kivol.mp3"
+dest_files=[ "res://.import/tank_kivol.mp3-47cf1a148a3a6c06ea3ea301fb08f67f.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/explo try2 le mieux.mp3-52228a918e6e9dad64c177f0e1a4d93b.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/explo try2 le mieux.mp3"
+dest_files=[ "res://.import/explo try2 le mieux.mp3-52228a918e6e9dad64c177f0e1a4d93b.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

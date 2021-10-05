@@ -8,6 +8,11 @@ public class MainMenu : VBoxContainer
         
     }
 
+    public void MainScene()
+    {
+        GetTree().ChangeScene("res://Scenes/MainMenu.tscn");
+    }
+
     public void Play()
     {
         GetTree().ChangeScene("res://Scenes/Game.tscn");

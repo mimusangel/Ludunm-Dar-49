@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/NeonLampe001.obj-9c6b34c86685f3bfc8c759563fe7f09b.mesh"
+
+[deps]
+
+files=[ "res://.import/NeonLampe001.obj-9c6b34c86685f3bfc8c759563fe7f09b.mesh" ]
+
+source_file="res://Models/NeonLampe001.obj"
+dest_files=[ "res://.import/NeonLampe001.obj-9c6b34c86685f3bfc8c759563fe7f09b.mesh", "res://.import/NeonLampe001.obj-9c6b34c86685f3bfc8c759563fe7f09b.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

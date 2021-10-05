@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class BtnMenuCircle : Button
+public class BtnMenuCircle : TextureRect
 {
 
     [Export]
@@ -9,14 +9,6 @@ public class BtnMenuCircle : Button
     [Export]
     public int gadgetDataID = -1;
     [Export]
-    public Texture icon;
+    public int cost = 0;
 
-    public override void _Ready()
-    {
-        TextureRect img = GetNode<TextureRect>("TextureRect");
-        if (img != null)
-        {
-            img.Texture = icon;
-        }
-    }
 }

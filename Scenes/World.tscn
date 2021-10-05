@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://Scenes/Room.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scripts/Spawner.cs" type="Script" id=2]
 
 [node name="World" type="Spatial"]
 
@@ -106,6 +105,15 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -18.75 )
 [node name="Spatial" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial2/Spatial/Spatial2/Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12.4299 )
 
+[node name="Spatial2" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -26.75 )
+
+[node name="Spatial2" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.25, 0, 0 )
+
+[node name="Spatial2" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0, -2 )
+
 [node name="Spatial2" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0 )
 
@@ -133,13 +141,8 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -19 )
 [node name="Spatial" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial2/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 16.25, 0.25, 0 )
 
-[node name="Spawner" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.25, 0, 0 )
-script = ExtResource( 2 )
-firstSpawnTime = 20.0
+[node name="Spatial2" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial2/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0 )
 
-[node name="Spawner2" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0 )
-script = ExtResource( 2 )
-firstSpawnTime = 60.0
-timeToSpawn = 10.0
+[node name="Spatial2" type="Spatial" parent="Navigation/Spatial/Spatial/Spatial/Spatial2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, -1.5 )

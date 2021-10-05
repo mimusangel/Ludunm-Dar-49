@@ -11,5 +11,5 @@ dest_files=[ "res://.import/lazer_glace.mp3-aa6bf66cccfa16da3f49b8eb23377e17.mp3
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

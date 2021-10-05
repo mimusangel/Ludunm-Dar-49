@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/MuralNeon002.obj-c85388efedb51ce5001e9845b67bf9aa.mesh"
+
+[deps]
+
+files=[ "res://.import/MuralNeon002.obj-c85388efedb51ce5001e9845b67bf9aa.mesh" ]
+
+source_file="res://Models/MuralNeon002.obj"
+dest_files=[ "res://.import/MuralNeon002.obj-c85388efedb51ce5001e9845b67bf9aa.mesh", "res://.import/MuralNeon002.obj-c85388efedb51ce5001e9845b67bf9aa.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

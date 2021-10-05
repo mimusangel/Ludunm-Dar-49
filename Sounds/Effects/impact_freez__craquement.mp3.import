@@ -11,5 +11,5 @@ dest_files=[ "res://.import/impact_freez__craquement.mp3-820e6ea78a2e271b9f35fb9
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

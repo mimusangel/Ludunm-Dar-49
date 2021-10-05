@@ -23,9 +23,10 @@ public class SimpleIA : KinematicBody
     public float speed = 5.0f;
 
     Spatial _target = null;
-    Vector3 _lastPos = new Vector3();
     Spatial _currentPath = null;
     bool _currentPathIsEnd = false;
+
+    Vector3 _pathFeature = new Vector3();
 
     float pctFreeze;
     float freezeTime = 0.0f;
@@ -33,12 +34,37 @@ public class SimpleIA : KinematicBody
     [Export]
     public float durability = 10.0f;
 
+    [Export]
+    public bool deathOnAttack = false;
+    [Export]
+    public float attackDamage = 0.005f;
+    [Export]
+    public float attackDamageRand = 0.01f;
+    [Export]
+    public float attackCD = 0.25f;
+    [Export]
+    public string NameOfRender = "";
+
+    Vector3 _lastPos = new Vector3();
+    float _lastPosTimer = 1.0f;
     public override void _Ready()
     {
         var area = GetNode<Area>("Area");
         area.Scale = Vector3.One * targetDist;
         area.Connect("body_entered", this, "OnBodyEntered");
         area.Connect("body_exited", this, "OnBodyExited");
+        speed = speed + GD.Randf() - 0.5f;
+
+        var animation = GetNodeOrNull<AnimationPlayer>("AnimationPlayer");
+        if (animation != null)
+        {
+            if (animation.HasAnimation("Idle"))
+            {
+                animation.Play("Idle");
+            }
+        }
+        _atkCD = attackCD;
+        _lastPos = GlobalTransform.origin;
     }
 
     public void OnBodyEntered(Node body)
@@ -155,10 +181,20 @@ public class SimpleIA : KinematicBody
 
         if (durability <= 0.0f)
         {
-            GameData data = GetNode<GameData>("/root/GameData");
-            data.SpwanSound(GlobalTransform.origin);
-            this.QueueFree();
+            Death();
         }
+    }
+
+    public void Death()
+    {
+        GameData data = GetNode<GameData>("/root/GameData");
+        data.SpwanSound(GlobalTransform.origin);
+
+        Spatial scrap = GD.Load<PackedScene>("res://Scenes/Scrap.tscn").Instance<Spatial>();
+        scrap.Translation = GlobalTransform.origin;
+        GetTree().CurrentScene.AddChild(scrap);
+
+        this.QueueFree();
     }
 
     float _atkCD = 0.0f;
@@ -167,12 +203,12 @@ public class SimpleIA : KinematicBody
         _atkCD = _atkCD - delta;
         if (_atkCD <= 0.0f)
         {
-            _atkCD += 0.25f;
+            _atkCD += attackCD;
             if (IsInstanceValid(_target) && _target.IsInsideTree())
             {
                 if (_target is Objects)
                 {
-                    ((Objects)_target).Hit(0.01f + GD.Randf() * 0.02f);
+                    ((Objects)_target).Hit(attackDamage + GD.Randf() * attackDamageRand);
                 }
 
                 // Animation
@@ -188,6 +224,25 @@ public class SimpleIA : KinematicBody
                     
                         particle.Restart();
                     }
+                }
+            }
+            if (deathOnAttack)
+            {
+                Death();
+            }
+        }
+        else
+        {
+            if (deathOnAttack)
+            {
+                Spatial render = GetNodeOrNull<Spatial>(NameOfRender);
+                if (render != null)
+                {
+                    render.Scale = Vector3.One * (2.0f - (_atkCD / attackCD));
+                }
+                else
+                {
+                    this.Scale = Vector3.One * (2.0f - (_atkCD / attackCD));
                 }
             }
         }
@@ -247,13 +302,12 @@ public class SimpleIA : KinematicBody
             else
             {
                 float l = GlobalTransform.origin.DistanceTo(_currentPath.GlobalTransform.origin);
-                if (l < 1.0f && _currentPathIsEnd == false)
+                if (l <= 1.5f && _currentPathIsEnd == false)
                 {
-                    _lastPos = _currentPath.GlobalTransform.origin;
                     _currentPath = _currentPath.GetParent<Spatial>();
                     _currentPathIsEnd = _currentPath.Name.Equals("Navigation", StringComparison.OrdinalIgnoreCase);
                 }
-                goTo = _currentPath.GlobalTransform.origin;
+                goTo = _currentPath.GlobalTransform.origin + _pathFeature;
             }
         }
         float len = GlobalTransform.origin.DistanceTo(goTo);
@@ -270,8 +324,31 @@ public class SimpleIA : KinematicBody
             Vector3 dir = (goTo - GlobalTransform.origin);
             dir.y = 0.0f;
             dir = dir.Normalized();
+            _lastPosTimer -= delta;
+            if (_lastPosTimer < 0.0f)
+            {
+                _lastPosTimer = 1.0f;
+                if (_lastPos == GlobalTransform.origin)
+                {
+                    MoveAndSlide(dir.Cross(Vector3.Up) * speed * (1.0f - pctFreeze), Vector3.Up);
+                }
+
+                var space = GetWorld().DirectSpaceState;
+                Vector3 p = GlobalTransform.origin + Vector3.Up;
+                var collid = space.IntersectRay(p, p + dir * 2.0f, new Godot.Collections.Array() { this.GetRid() }, 4);
+                if (collid.Count > 0)
+                {
+                    MoveAndSlide(dir.Cross(Vector3.Up) * speed * (1.0f - pctFreeze), Vector3.Up);
+                }
+
+                _lastPos = GlobalTransform.origin;
+            }
+
             MoveAndSlide(dir * speed * (1.0f - pctFreeze), Vector3.Up);
-            this.LookAt(Transform.origin + dir, Vector3.Up);
+            if (Transform.origin + dir != Transform.origin)
+            {
+                this.LookAt(Transform.origin + dir, Vector3.Up);
+            }
         }
         MoveAndSlide(Vector3.Down * 5.0f, Vector3.Up);
     }
@@ -287,11 +364,17 @@ public class SimpleIA : KinematicBody
                 {
                     return;
                 }
-                animation.Play("Walk");
+                if (animation.HasAnimation("Walk"))
+                {
+                    animation.Play("Walk");
+                }
             }
             else
             {
-                animation.Play("Attack");
+                if (animation.HasAnimation("Attack"))
+                {
+                    animation.Play("Attack");
+                }
             }
         }
     }
@@ -324,7 +407,11 @@ public class SimpleIA : KinematicBody
         SearchPathInChild(_searchNode);
         _currentPath = _searchNode;
         _currentPathIsEnd = false;
-        _lastPos = GlobalTransform.origin;
+        _pathFeature = new Vector3(
+            GD.Randf() * 2.0f - 1.0f,
+            0.0f,
+            GD.Randf() * 2.0f - 1.0f
+            );
     }
 
     private void SearchPathInChild(Spatial currentNode)

@@ -3,7 +3,7 @@
 [sub_resource type="VisualShaderNodeTextureUniform" id=1]
 uniform_name = "albedo"
 
-[sub_resource type="VisualShaderNodeColorUniform" id=3]
+[sub_resource type="VisualShaderNodeColorUniform" id=2]
 uniform_name = "Emission"
 
 [resource]
@@ -50,6 +50,6 @@ graph_offset = Vector2( -398.75, 158 )
 modes/cull = 2
 nodes/fragment/2/node = SubResource( 1 )
 nodes/fragment/2/position = Vector2( -260, 60 )
-nodes/fragment/4/node = SubResource( 3 )
+nodes/fragment/4/node = SubResource( 2 )
 nodes/fragment/4/position = Vector2( -240, 260 )
 nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0, 4, 0, 0, 5 )

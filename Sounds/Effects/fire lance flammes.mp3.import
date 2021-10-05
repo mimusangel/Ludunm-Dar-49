@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/fire lance flammes.mp3-4b5af339c17da5b658f9746b12e4e921.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/fire lance flammes.mp3"
+dest_files=[ "res://.import/fire lance flammes.mp3-4b5af339c17da5b658f9746b12e4e921.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/lance glace 2 (DOT).mp3-d4f5efe6a0a7d8834775919d2faf40cd.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/lance glace 2 (DOT).mp3"
+dest_files=[ "res://.import/lance glace 2 (DOT).mp3-d4f5efe6a0a7d8834775919d2faf40cd.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

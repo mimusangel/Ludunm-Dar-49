@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/explo try1 mono.mp3-18e907f16fd7d412e915c50ae94fad37.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Effects/explo try1 mono.mp3"
+dest_files=[ "res://.import/explo try1 mono.mp3-18e907f16fd7d412e915c50ae94fad37.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
